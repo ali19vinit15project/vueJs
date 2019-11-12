@@ -25,14 +25,15 @@
 </template>
 <script>
 import { PaperTable } from "@/components";
-const tableColumns = ["Id", "Name", "Salary", "Country", "City"];
+const tableColumns = ["Id", "Name", "Salary", "Country", "City","action"];
 const tableData = [
   {
     id: 1,
     name: "Dakota Rice",
     salary: "$36.738",
     country: "Niger",
-    city: "Oud-Turnhout"
+    city: "Oud-Turnhout",
+    action: "Edit"
   },
   {
     id: 2,
