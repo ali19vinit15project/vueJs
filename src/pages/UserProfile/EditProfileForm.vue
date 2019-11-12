@@ -1,42 +1,25 @@
 <template>
-  <card class="card" title="Edit Profile">
+  <card class="card" title="Add Profile">
     <div>
       <form @submit.prevent>
-        <div class="row">
-          <div class="col-md-5">
-            <fg-input type="text"
-                      label="Company"
-                      :disabled="true"
-                      placeholder="Paper dashboard"
-                      v-model="user.company">
-            </fg-input>
-          </div>
-          <div class="col-md-3">
+        
 
-            <fg-input type="text"
-                      label="Username"
-                      placeholder="Username"
-                      v-model="user.username">
-            </fg-input>
-          </div>
+        <div class="row">
           <div class="col-md-4">
-            <fg-input type="email"
-                      label="Username"
-                      placeholder="Email"
-                      v-model="user.email">
-            </fg-input>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
             <fg-input type="text"
                       label="First Name"
                       placeholder="First Name"
                       v-model="user.firstName">
             </fg-input>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="Middle Name"
+                      placeholder="Middle Name"
+                      v-model="user.middleName">
+            </fg-input>
+          </div>
+           <div class="col-md-4">
             <fg-input type="text"
                       label="Last Name"
                       placeholder="Last Name"
@@ -45,12 +28,27 @@
           </div>
         </div>
 
+
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-4">
             <fg-input type="text"
-                      label="Address"
-                      placeholder="Home Address"
-                      v-model="user.address">
+                      label="Email"
+                      placeholder="Email Address"
+                      v-model="user.email">
+            </fg-input>
+          </div>
+            <div class="col-md-4">
+            <fg-input type="text"
+                      label="Phome Number"
+                      placeholder="Phone Number"
+                      v-model="user.phoneNumber">
+            </fg-input>
+          </div>
+               <div class="col-md-4">
+            <fg-input type="text"
+                      label="Emergency Phone Number"
+                      placeholder="Emergency Phone"
+                      v-model="user.emergencyphone">
             </fg-input>
           </div>
         </div>
@@ -58,44 +56,88 @@
         <div class="row">
           <div class="col-md-4">
             <fg-input type="text"
-                      label="City"
-                      placeholder="City"
-                      v-model="user.city">
+                      label="Aadhar"
+                      placeholder="Aadhar Card"
+                      v-model="user.aadhar">
             </fg-input>
           </div>
           <div class="col-md-4">
             <fg-input type="text"
-                      label="Country"
-                      placeholder="Country"
-                      v-model="user.country">
+                      label="PAN No."
+                      placeholder="PAN No."
+                      v-model="user.pan">
             </fg-input>
           </div>
           <div class="col-md-4">
-            <fg-input type="number"
-                      label="Postal Code"
-                      placeholder="ZIP Code"
-                      v-model="user.postalCode">
+            <fg-input type="text"
+                      label="Blood Group"
+                      placeholder="Blood Group"
+                      v-model="user.bloodGroup">
             </fg-input>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="Qualification"
+                      placeholder="Qualification"
+                      v-model="user.qualification">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+            <fg-input type="file"
+                      label="Photo"
+                      v-model="user.photo">
+            </fg-input>
+          </div>
 
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="D.O.B"
+                      placeholder="D.O.B"
+                      v-model="user.dob">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+          <label>Gender</label><br>
+          <select v-model="user.gender">
+            <option disabled selected value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Others</option>
+           </select>
+          </div>
+          <div class="col-md-4">
+          <label>Martial Status</label><br>
+          <select v-model="user.martialStatus">
+            <option disabled selected value="">Select Status</option>
+              <option>Married</option>
+              <option>UnMarried</option>
+              <option>Divorce</option>
+           </select>
+          </div>
+
+        </div>
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label>About Me</label>
-              <textarea rows="5" class="form-control border-input"
-                        placeholder="Here can be your description"
-                        v-model="user.aboutMe">
+              <label>Address</label>
+              <textarea rows="3" class="form-control border-input"
+                        placeholder="Address description"
+                        v-model="user.address">
 
               </textarea>
             </div>
           </div>
         </div>
+
         <div class="text-center">
           <p-button type="info"
                     round
                     @click.native.prevent="updateProfile">
-            Update Profile
+            Add Profile
           </p-button>
         </div>
         <div class="clearfix"></div>
@@ -108,15 +150,21 @@ export default {
   data() {
     return {
       user: {
-        company: "Paper Dashboard",
-        username: "michael23",
+        firstName: "",
+        lastName: "",
+        middeName: "",
         email: "",
-        firstName: "Chet",
-        lastName: "Faker",
-        address: "Melbourne, Australia",
-        city: "Melbourne",
-        postalCode: "",
-        aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
+        phoneNumber: "",
+        emergencyphone: "",
+        aadhar: "",
+        pan: "",
+        bloodGroup: "",
+        qualification: "",
+        photo: "",
+        dob: "",
+        gender: "",
+        martialStatus: "",
+        address: ""
       }
     };
   },
