@@ -7,6 +7,7 @@
         <div class="row">
           <div class="col-md-4">
             <fg-input type="text"
+                      require
                       label="First Name"
                       placeholder="First Name"
                       v-model="user.firstName">
@@ -125,18 +126,41 @@
             <div class="form-group">
               <label>Address</label>
               <textarea rows="3" class="form-control border-input"
-                        placeholder="Address description"
-                        v-model="user.address">
+                        placeholder="Enter Area, Street No, LandMark"
+                        v-model="user.address.area">
 
               </textarea>
             </div>
           </div>
         </div>
-
+        <div class="row">
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="State"
+                      placeholder="State"
+                      v-model="user.address.state">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="City"
+                      placeholder="City"
+                      v-model="user.address.city">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="Pin Code"
+                      placeholder="Pin Code"
+                      v-model="user.address.pincode">
+            </fg-input>
+          </div>
+        </div>
+        
         <div class="text-center">
           <p-button type="info"
                     round
-                    @click.native.prevent="updateProfile">
+                    @click="updateProfile">
             Add Profile
           </p-button>
         </div>
@@ -164,7 +188,12 @@ export default {
         dob: "",
         gender: "",
         martialStatus: "",
-        address: ""
+        address: {
+          area : "",
+          state: "",
+          city: "",
+          pincode: ""
+        }
       }
     };
   },
