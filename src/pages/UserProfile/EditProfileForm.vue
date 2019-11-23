@@ -1,7 +1,7 @@
 <template>
   <card class="card" title="Add Profile">
     <div>
-      <form @submit.prevent>
+      <form @submit.prevent v-on:submit="save" action="#" method="post">
         
 
         <div class="row">
@@ -42,14 +42,14 @@
             <fg-input type="text"
                       label="Phome Number"
                       placeholder="Phone Number"
-                      v-model="user.phoneNumber">
+                      v-model="user.phoneNum">
             </fg-input>
           </div>
                <div class="col-md-4">
             <fg-input type="text"
                       label="Emergency Phone Number"
                       placeholder="Emergency Phone"
-                      v-model="user.emergencyphone">
+                      v-model="user.emrgncyPhoneNum">
             </fg-input>
           </div>
         </div>
@@ -156,20 +156,17 @@
             </fg-input>
           </div>
         </div>
-        
+
         <div class="text-center">
-          <p-button type="info"
-                    round
-                    @click="updateProfile">
-            Add Profile
-          </p-button>
-        </div>
+          <button class ="btn btn-round btn-info" type="submit">Entrar</button>
+        </div> 
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
 </template>
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -178,13 +175,13 @@ export default {
         lastName: "",
         middeName: "",
         email: "",
-        phoneNumber: "",
-        emergencyphone: "",
+        phoneNum: "",
+        emrgncyPhoneNum: "",
         aadhar: "",
         pan: "",
         bloodGroup: "",
         qualification: "",
-        photo: "",
+        photo: null,
         dob: "",
         gender: "",
         martialStatus: "",
@@ -198,8 +195,38 @@ export default {
     };
   },
   methods: {
-    updateProfile() {
-      alert("Your data: " + JSON.stringify(this.user));
+    save() {
+      const userObj = this.user;
+      const url = 'http://localhost:8090/api/employees'
+      console.log("User data: ",userObj);
+      const res = axios.post(url,userObj);
+      console.log("typeof axios:", typeof res);
+      res.then(function (response) {
+    console.log(response.data);
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+  })
+  .catch(function (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+  });
+      
     }
   }
 };
