@@ -95,11 +95,14 @@
         </div>
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text"
+            <!-- <fg-input type="text"
                       label="D.O.B"
                       placeholder="D.O.B"
                       v-model="user.dob">
-            </fg-input>
+            </fg-input> -->
+            <label>Date Of Birth</label><br>
+            <datepicker :value="user.dob" v-model="user.dob"
+            placeholder = "Enter DOB" input-class	="form-control"></datepicker>
           </div>
           <div class="col-md-4">
           <label>Gender</label><br>
@@ -167,7 +170,11 @@
 </template>
 <script>
 import axios from 'axios';
+import Datepicker from 'vuejs-datepicker';
 export default {
+  components: {
+    Datepicker
+  },
   data() {
     return {
       user: {
