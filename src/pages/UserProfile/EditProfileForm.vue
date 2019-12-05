@@ -73,30 +73,25 @@
             ></fg-input>
           </div>
           <div class="col-md-4">
-            <input 
-            type="file" 
-            ref="imageUpload" 
-            label="Photo" 
-            id="tempImage"
-            @change="previewImage($event)"
-            accept=".jpg, .jpeg, .png, .gif" />
-            </div>
+            <input
+              type="file"
+              ref="imageUpload"
+              label="Photo"
+              id="tempImage"
+              @change="previewImage($event)"
+              accept="image/*"
+            >
+          </div>
         </div>
         <div class="row">
           <div class="col-md-4">
-            <!-- <fg-input type="text"
-                      label="D.O.B"
-                      placeholder="D.O.B"
-                      v-model="user.dob">
-            </fg-input>-->
             <label>Date Of Birth</label>
             <br>
-            <datepicker
-              :value="user.dob"
+            <date-pick
               v-model="user.dob"
-              placeholder="Enter DOB"
-              input-class="form-control"
-            ></datepicker>
+              :displayFormat="'DD-MM-YYYY'"
+              :format="'DD-MM-YYYY'"
+              ></date-pick>
           </div>
           <div class="col-md-4">
             <label>Gender</label>
@@ -158,23 +153,24 @@
   </card>
 </template>
 <script>
-import {first} from 'lodash';    
+import { first } from "lodash";
 import axios from "axios";
-import Datepicker from "vuejs-datepicker";
-import { constants } from 'fs';
+import { constants } from "fs";
+import DatePick from 'vue-date-pick';
+import 'vue-date-pick/dist/vueDatePick.css';
 
-  //const MAX_IMG_SIZE : 500;
+
+//const MAX_IMG_SIZE : 500;
 
 export default {
   components: {
-    Datepicker
+     DatePick
   },
   data() {
     return {
-      tempImage: '',
-        isFileExist: false,
-        maxImageSie: false,
-        isValidFileType: true,
+      tempImage: "",
+      isFileExist: false,
+      maxImageSie: false,
       user: {
         firstName: "",
         lastName: "",
@@ -200,47 +196,33 @@ export default {
     };
   },
   methods: {
+    
     previewImage(event) {
       const files = event.target.files;
-      if(files && first(files)) {
-        this.isValidFileType = this.validateFileTypes(first(files).type);
-        if(this.isValidFileType) {
-          this.isFileExist = true;
-          if( files[0].size / 1024 > 500) {
-            this.maxImageSie = true;
-          } else {
-            this.maxImageSie = false;
-            const reader = new FileReader();
-            reader.onload = evt => {
-              this.user.photo = evt.target.result;
-            };
-            reader.readAsDataURL(first(files));
-          }
+      if (files && first(files)) {
+        this.isFileExist = true;
+        if (files[0].size / 1024 > 500) {
+          this.maxImageSie = true;
         } else {
-          this.isValidFileType = false;
+          this.maxImageSie = false;
+          const reader = new FileReader();
+          reader.onload = evt => {
+            this.user.photo = evt.target.result;
+          };
+          reader.readAsDataURL(first(files));
         }
       } else {
         this.clearImg();
       }
     },
-
-    validateFileTypes(fileType) {
-      switch(fileType) {
-        case 'image/png' : return true;
-        case 'image/jpg' : return true;
-        case 'image/jpeg' : return true;
-        case 'image/gif' : return true;
-        default: return false;
-      }
-    },
+    
     clearImg() {
-      this.$refs.imageUpload.value= '';
+      this.$refs.imageUpload.value = "";
       this.isFileExist = false;
       this.maxImageSie = false;
-      this.isValidFileType = true;
     },
 
-     save() {
+    save() {
       const userObj = this.user;
       const url = "http://localhost:8090/api/employees";
       const res = axios.post(url, userObj);
