@@ -1,6 +1,7 @@
 <template>
   <card class="card" title="Add Profile">
     <div>
+      <ValidationObserver v-slot="{ invalid }">
       <form @submit.prevent v-on:submit="save" action="#" method="post">
         <div class="row">
           <div class="col-md-4">
@@ -73,6 +74,8 @@
             ></fg-input>
           </div>
           <div class="col-md-4">
+          <label>Profile Picture</label>
+            <br>
             <input
               type="file"
               ref="imageUpload"
@@ -145,10 +148,11 @@
         </div>
 
         <div class="text-center">
-          <button class="btn btn-round btn-info" type="submit">Entrar</button>
+          <button class="btn btn-round btn-info" type="submit" :disabled="invalid">Entrar</button>
         </div>
         <div class="clearfix"></div>
       </form>
+      </ValidationObserver>
     </div>
   </card>
 </template>
@@ -158,13 +162,14 @@ import axios from "axios";
 import { constants } from "fs";
 import DatePick from 'vue-date-pick';
 import 'vue-date-pick/dist/vueDatePick.css';
-
+import { ValidationObserver } from 'vee-validate';
 
 //const MAX_IMG_SIZE : 500;
 
 export default {
   components: {
-     DatePick
+     DatePick,
+     ValidationObserver
   },
   data() {
     return {

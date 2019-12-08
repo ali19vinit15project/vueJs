@@ -19,9 +19,9 @@
       }"
       :pagination-options="{
         enabled: true,
-        perPage: 5,
+        perPage: 4,
         position: 'top',
-        perPageDropdown: [3, 7, 9],
+        perPageDropdown: [3, 5, 9, 11],
         dropdownAllowAll: false,
         rowsPerPageLabel: 'Employees per page',
         mode: 'pages'
@@ -37,7 +37,9 @@
       styleClass="vgt-table striped bordered"
       >
         <div slot="table-actions">
-          <button>Eg: Add new Employee Buton here</button> 
+          <button>Add</button> 
+           <button>Delete</button>
+            <button>Edit</button>
         </div>
     </vue-good-table>
   </div>
@@ -108,6 +110,8 @@ export default {
         { id:4, name:"Chris", age: 5, score: 0.83343 },
         { id:5, name:"Dan", age: 40, score: 0.3343 },
         { id:6, name:"John", age: 20, score: 0.10343 },
+        { id:6, name:"Ali", age: 90, score: 0.8433 },
+        { id:6, name:"Vinit", age: 80, score: 0.8433 },
       ],
     };
   },
