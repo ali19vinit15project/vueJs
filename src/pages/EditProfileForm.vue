@@ -10,7 +10,9 @@
               label="First Name"
               placeholder="First Name"
               v-model="user.firstName"
+              :validationFlag="submitted && $v.user.firstName.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block" >First Name is required</div>  
           </div>
           <div class="col-md-4">
             <fg-input
@@ -18,6 +20,7 @@
               label="Middle Name"
               placeholder="Middle Name"
               v-model="user.middleName"
+              
             ></fg-input>
           </div>
           <div class="col-md-4">
@@ -160,6 +163,7 @@ import axios from "axios";
 import { constants } from "fs";
 import DatePick from 'vue-date-pick';
 import 'vue-date-pick/dist/vueDatePick.css';
+import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
 //const MAX_IMG_SIZE : 500;
 
@@ -193,9 +197,15 @@ export default {
           city: "",
           pincode: ""
         }
-      }
+      },
+      submitted: false
     };
   },
+  validations: {
+            user: {
+                firstName: { required, alpha }
+            }
+        },
   methods: {
     
     previewImage(event) {
@@ -224,6 +234,19 @@ export default {
     },
 
     save() {
+
+                this.submitted = true;
+
+                // stop here if form is invalid
+                this.$v.$touch();
+                if (this.$v.$invalid) {
+                  console.log('here',  this.$v);
+                    return;
+                }
+
+                alert("SUCCESS!! :-)\n\n" + JSON.stringify(this.user));
+
+
       const userObj = this.user;
       const url = "http://localhost:8090/api/employees";
       const res = axios.post(url, userObj);

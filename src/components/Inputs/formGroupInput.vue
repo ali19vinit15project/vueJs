@@ -15,7 +15,8 @@
       @input="$emit('input',$event.target.value)"
       v-bind="$attrs"
       class="form-control"
-      aria-describedby="addon-right addon-left">
+      aria-describedby="addon-right addon-left"
+      :class="{ 'is-invalid': validationFlag }" >
     <slot></slot>
     <slot name="addonRight">
       <span v-if="addonRightIcon" class="input-group-append">
@@ -32,7 +33,8 @@
       label: String,
       value: [String, Number],
       addonRightIcon: String,
-      addonLeftIcon: String
+      addonLeftIcon: String,
+      validationFlag: Boolean
     },
     computed: {
       hasIcon() {
