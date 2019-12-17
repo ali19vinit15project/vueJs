@@ -12,6 +12,7 @@
               v-model="user.firstName"
               :validationFlag="submitted && $v.user.firstName.$error"
             ></fg-input>
+            
             <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block" >First Name is required</div>  
           </div>
           <div class="col-md-4">
@@ -203,7 +204,7 @@ export default {
   },
   validations: {
             user: {
-                firstName: { required, alpha }
+                firstName: { required }
             }
         },
   methods: {
