@@ -10,19 +10,12 @@
         <i :class="addonLeftIcon" class="input-group-text"></i>
       </span>
     </slot>
-    <ValidationProvider name="Hello world" rules="required|alpha">
-      <div slot-scope="{ errors }">
-        <!-- <input v-model="email"> -->
-        <input
+    <input
       :value="value"
       @input="$emit('input',$event.target.value)"
       v-bind="$attrs"
       class="form-control"
       aria-describedby="addon-right addon-left">
-        <p>{{ errors[0] }}</p>
-      </div>
-    </ValidationProvider>
-    
     <slot></slot>
     <slot name="addonRight">
       <span v-if="addonRightIcon" class="input-group-append">
@@ -32,12 +25,7 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from 'vee-validate';
-
   export default {
-    components: {
-      ValidationProvider
-    },
     inheritAttrs: false,
     name: "fg-input",
     props: {
