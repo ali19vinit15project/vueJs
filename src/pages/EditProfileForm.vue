@@ -12,8 +12,8 @@
               v-model="user.firstName"
               :validationFlag="submitted && $v.user.firstName.$error"
             ></fg-input>
-            
-            <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block" >First Name is required</div>  
+           <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block">{{errorMsg.firstName.required}}</div> 
+           <div v-if="submitted && !$v.user.firstName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.firstName.alpha}}</div> 
           </div>
           <div class="col-md-4">
             <fg-input
@@ -21,7 +21,7 @@
               label="Middle Name"
               placeholder="Middle Name"
               v-model="user.middleName"
-              
+             
             ></fg-input>
           </div>
           <div class="col-md-4">
@@ -31,7 +31,13 @@
 
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" label="Email" placeholder="Email Address" v-model="user.email"></fg-input>
+            <fg-input type="text" 
+            label="Email" placeholder="Email Address" 
+            v-model="user.email"
+            :validationFlag="submitted && $v.user.email.$error"
+            ></fg-input>
+           <div v-if="submitted && !$v.user.email.required" class="invalid-feedback" style="display: block">{{errorMsg.email.required}}</div> 
+           <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div> 
           </div>
           <div class="col-md-4">
             <fg-input
@@ -39,7 +45,12 @@
               label="Phome Number"
               placeholder="Phone Number"
               v-model="user.phoneNum"
+              :validationFlag="submitted && $v.user.phoneNum.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.phoneNum.required" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.required}}</div> 
+            <div v-if="submitted && !$v.user.phoneNum.numeric" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.numeric}}</div> 
+            <div v-if="submitted && !$v.user.phoneNum.minLength" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.minLength}}</div>
+            <div v-if="submitted && !$v.user.phoneNum.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.maxLength}}</div>
           </div>
           <div class="col-md-4">
             <fg-input
@@ -56,7 +67,16 @@
             <fg-input type="text" label="Aadhar" placeholder="Aadhar Card" v-model="user.aadhar"></fg-input>
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="PAN No." placeholder="PAN No." v-model="user.pan"></fg-input>
+            <fg-input type="text" label="PAN No." placeholder="PAN No." v-model="user.pan"
+
+
+
+:validationFlag="submitted && $v.user.pan.$error"
+            ></fg-input>
+           <div v-if="submitted && !$v.user.pan.required" class="invalid-feedback" style="display: block">{{errorMsg.pan.required}}</div> 
+           <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div> 
+          
+
           </div>
           <div class="col-md-4">
             <fg-input
@@ -88,6 +108,7 @@
               accept="image/*"
             >
           </div>
+          
         </div>
         <div class="row">
           <div class="col-md-4">
@@ -164,7 +185,9 @@ import axios from "axios";
 import { constants } from "fs";
 import DatePick from 'vue-date-pick';
 import 'vue-date-pick/dist/vueDatePick.css';
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import { required, alpha, email, minLength, numeric, maxLength, sameAs, helpers } from "vuelidate/lib/validators";
+
+const pan = helpers.regex('pan', /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/)
 
 //const MAX_IMG_SIZE : 500;
 
@@ -199,12 +222,35 @@ export default {
           pincode: ""
         }
       },
-      submitted: false
+      submitted: false,
+      errorMsg: {
+        firstName:{
+          required: "First Name is required",
+          alpha: "Only alphabets are allowed"
+        },
+        email: {
+          required: "email is required",
+          email: "should be valid email"
+        },
+        phoneNum: {
+          required: "phoneNum is required",
+          numeric: "phoneNum must be numeric",
+          minLength: "length must be equal to 10",
+          maxLength: "length must be equal to 10"
+        },
+        pan: {
+          required: "PAN is required",
+          pan: "Must be a valid PAN eg: ABCDE1234Z"
+        }
+      }
     };
   },
   validations: {
             user: {
-                firstName: { required }
+                firstName: { required, alpha },
+                email: { required, email },
+                phoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
+                pan: { required, pan }
             }
         },
   methods: {

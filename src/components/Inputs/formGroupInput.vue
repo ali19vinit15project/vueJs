@@ -17,7 +17,9 @@
       class="form-control"
       aria-describedby="addon-right addon-left"
       :class="{ 'is-invalid': validationFlag }" >
+
     <slot></slot>
+    
     <slot name="addonRight">
       <span v-if="addonRightIcon" class="input-group-append">
         <i :class="addonRightIcon" class="input-group-text"></i>
@@ -34,7 +36,7 @@
       value: [String, Number],
       addonRightIcon: String,
       addonLeftIcon: String,
-      validationFlag: Boolean
+      validationFlag: Boolean,
     },
     computed: {
       hasIcon() {
