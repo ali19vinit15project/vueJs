@@ -1,6 +1,13 @@
 <template>
   <div>
     <vue-good-table
+      mode="remote"
+      @on-page-change="onPageChange"
+      @on-sort-change="onSortChange"
+      @on-column-filter="onColumnFilter"
+      @on-per-page-change="onPerPageChange"
+      :totalRows="totalRecords"
+      :isLoading.sync="isLoading"
       ref="my-table"
       :columns="columns"
       :rows="rows"
@@ -13,13 +20,14 @@
       :sort-options="{
         enabled: true,
         initialSortBy: [
-          {field: 'name', type: 'asc'},
-          {field: 'age', type: 'asc'}
+          {field: 'name', type: 'asc', columnIndex: 1},
+          {field: 'age', type: 'asc', columnIndex: 2},
+          {field: 'score', type: 'asc', columnIndex: 3}
         ],
       }"
       :pagination-options="{
         enabled: true,
-        perPage: 4,
+        perPage: 10,
         position: 'top',
         perPageDropdown: [3, 5, 9, 11],
         dropdownAllowAll: false,
@@ -80,11 +88,90 @@ export default {
   methods : {
     selectionChanged(){
       console.log(this.$refs['my-table'].selectedRows);
-    }
+    },
 
+    // Start: Methods added for Server side rendering
+    updateParams(newProps) {
+      console.log("updateParams");
+      this.serverParams = Object.assign({}, this.serverParams, newProps);
+    },
+    
+    onPageChange(params) {
+      console.log("onPageChange");
+      this.updateParams({page: params.currentPage});
+      this.loadItems();
+    },
+
+    onPerPageChange(params) {
+      console.log("onPerPageChange-",params.currentPerPage);
+      this.updateParams({perPage: params.currentPerPage});
+      this.loadItems();
+    },
+
+    onSortChange(params) {
+      console.log("onSortChange");
+      this.updateParams({
+        sort: [{
+          type: params.sortType,
+          field: this.columns[0].field,
+        }],
+      });
+      this.loadItems();
+    },
+    
+    onColumnFilter(params) {
+      console.log("onColumnFilter");
+      this.updateParams(params);
+      this.loadItems();
+    },
+
+    // load items is what brings back the rows from server
+    loadItems() {
+      this.totalRecords = 1;
+      var arr = [
+          { id:1, name:"Jwohn", age: 20, score: 0.03343 },
+          { id:2, name:"Jante", age: 24, score: 0.45343 },
+          { id:3, name:"Suvssan", age: 16, score: 0.23343 },
+          { id:4, name:"Sxusan", age: 16, score: 0.23343 },
+        { id:5, name:"Chyris", age: 5, score: 0.83343 },
+        { id:6, name:"Dain", age: 40, score: 0.3343 },
+        { id:7, name:"John", age: 20, score: 0.10343 },
+        { id:8, name:"Alzi", age: 90, score: 0.8433 },
+        { id:9, name:"Vidnit", age: 80, score: 0.8433 },
+        { id:10, name:"Chrfis", age: 5, score: 0.83343 },
+        { id:11, name:"Deakn", age: 40, score: 0.3343 },
+        { id:12, name:"Joehn", age: 20, score: 0.10343 },
+        { id:13, name:"Aqli", age: 90, score: 0.8433 },
+        { id:14, name:"Vinjit", age: 80, score: 0.8433 },
+      ];
+      var newArr = [...arr];
+      newArr.length = this.serverParams.perPage;
+      this.rows = newArr;
+      /*getFromServer(this.serverParams).then(response => {
+         this.totalRecords = response.totalRecords;
+         this.rows = response.rows;
+      });*/
+    }
+    // End: Methods added for Server side rendering
   },
   data(){
     return {
+      isLoading: false,
+      totalRecords: 14,
+      rows: [],
+      serverParams: {
+         // a map of column filters example: {name: 'john', age: '20'}
+        columnFilters: {
+
+        },
+        sort: {
+          field: 'name', // example: 'name'
+          type: 'asc', // 'asc' or 'desc'
+        },
+        page: 1, // what page I want to show
+        perPage: 10 // how many items I'm showing per page
+      },
+
       columns: [
         {
           label: 'Name',
@@ -94,30 +181,19 @@ export default {
           label: 'Age',
           field: 'age',
             type: 'number',
-          },
-          {
-            label: 'Percent',
-            field: 'score',
-            type: 'percentage',
-          },
-          {
-            label: 'Action',
-            field: 'edit',
-            sortable: false,
-            width: '75px',
-            tdClass: 'text-center',
-          },
-        ],
-        rows: [
-          { id:1, name:"John", age: 20, score: 0.03343 },
-          { id:2, name:"Jane", age: 24, score: 0.45343 },
-          { id:3, name:"Susan", age: 16, score: 0.23343 },
-          { id:3, name:"Susan", age: 16, score: 0.23343 },
-        { id:4, name:"Chris", age: 5, score: 0.83343 },
-        { id:5, name:"Dan", age: 40, score: 0.3343 },
-        { id:6, name:"John", age: 20, score: 0.10343 },
-        { id:6, name:"Ali", age: 90, score: 0.8433 },
-        { id:6, name:"Vinit", age: 80, score: 0.8433 },
+        },
+        {
+          label: 'Percent',
+          field: 'score',
+          type: 'percentage',
+        },
+        {
+          label: 'Action',
+          field: 'edit',
+          sortable: false,
+          width: '75px',
+          tdClass: 'text-center',
+        }
       ],
     };
   },
