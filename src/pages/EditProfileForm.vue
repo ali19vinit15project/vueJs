@@ -12,8 +12,8 @@
               v-model="user.firstName"
               :validationFlag="submitted && $v.user.firstName.$error"
             ></fg-input>
-           <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block">{{errorMsg.firstName.required}}</div> 
-           <div v-if="submitted && !$v.user.firstName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.firstName.alpha}}</div> 
+          <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback" style="display: block">{{errorMsg.firstName.required}}</div> 
+          <div v-if="submitted && !$v.user.firstName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.firstName.alpha}}</div> 
           </div>
           <div class="col-md-4">
             <fg-input
@@ -21,11 +21,17 @@
               label="Middle Name"
               placeholder="Middle Name"
               v-model="user.middleName"
-             
+            :validationFlag="submitted && $v.user.middleName.$error"
             ></fg-input>
+          <div v-if="submitted && !$v.user.middleName.required" class="invalid-feedback" style="display: block">{{errorMsg.middleName.required}}</div> 
+          <div v-if="submitted && !$v.user.middleName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.middleName.alpha}}</div>
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="Last Name" placeholder="Last Name" v-model="user.lastName"></fg-input>
+            <fg-input type="text" label="Last Name" placeholder="Last Name" v-model="user.lastName"
+            :validationFlag="submitted && $v.user.lastName.$error"
+            ></fg-input>
+            <div v-if="submitted && !$v.user.lastName.required" class="invalid-feedback" style="display: block">{{errorMsg.lastName.required}}</div> 
+          <div v-if="submitted && !$v.user.lastName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.lastName.alpha}}</div>
           </div>
         </div>
 
@@ -36,8 +42,7 @@
             v-model="user.email"
             :validationFlag="submitted && $v.user.email.$error"
             ></fg-input>
-           <div v-if="submitted && !$v.user.email.required" class="invalid-feedback" style="display: block">{{errorMsg.email.required}}</div> 
-           <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div> 
+          <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div> 
           </div>
           <div class="col-md-4">
             <fg-input
@@ -58,25 +63,31 @@
               label="Emergency Phone Number"
               placeholder="Emergency Phone"
               v-model="user.emrgncyPhoneNum"
+              :validationFlag="submitted && $v.user.emrgncyPhoneNum.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.emrgncyPhoneNum.required" class="invalid-feedback" style="display: block">{{errorMsg.emrgncyPhoneNum.required}}</div> 
+            <div v-if="submitted && !$v.user.emrgncyPhoneNum.numeric" class="invalid-feedback" style="display: block">{{errorMsg.emrgncyPhoneNum.numeric}}</div> 
+            <div v-if="submitted && !$v.user.emrgncyPhoneNum.minLength" class="invalid-feedback" style="display: block">{{errorMsg.emrgncyPhoneNum.minLength}}</div>
+            <div v-if="submitted && !$v.user.emrgncyPhoneNum.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.emrgncyPhoneNum.maxLength}}</div>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" label="Aadhar" placeholder="Aadhar Card" v-model="user.aadhar"></fg-input>
+            <fg-input type="text" label="Aadhar" placeholder="Aadhar Card" v-model="user.aadhar"
+            :validationFlag="submitted && $v.user.aadhar.$error"
+            ></fg-input>
+            <div v-if="submitted && !$v.user.aadhar.required" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.required}}</div> 
+            <div v-if="submitted && !$v.user.aadhar.numeric" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.numeric}}</div> 
+            <div v-if="submitted && !$v.user.aadhar.minLength" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.minLength}}</div>
+            <div v-if="submitted && !$v.user.aadhar.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.maxLength}}</div>
+
           </div>
           <div class="col-md-4">
             <fg-input type="text" label="PAN No." placeholder="PAN No." v-model="user.pan"
-
-
-
-:validationFlag="submitted && $v.user.pan.$error"
+            :validationFlag="submitted && $v.user.pan.$error"
             ></fg-input>
-           <div v-if="submitted && !$v.user.pan.required" class="invalid-feedback" style="display: block">{{errorMsg.pan.required}}</div> 
-           <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div> 
-          
-
+          <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div>        
           </div>
           <div class="col-md-4">
             <fg-input
@@ -84,7 +95,9 @@
               label="Blood Group"
               placeholder="Blood Group"
               v-model="user.bloodGroup"
+              :validationFlag="submitted && $v.user.bloodGroup.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.bloodGroup.bloodGroup" class="invalid-feedback" style="display: block">{{errorMsg.bloodGroup.bloodGroup}}</div>           
           </div>
         </div>
         <div class="row">
@@ -94,7 +107,10 @@
               label="Qualification"
               placeholder="Qualification"
               v-model="user.qualification"
+              :validationFlag="submitted && $v.user.qualification.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.qualification.required" class="invalid-feedback" style="display: block">{{errorMsg.qualification.required}}</div> 
+            <div v-if="submitted && !$v.user.qualification.qualification" class="invalid-feedback" style="display: block">{{errorMsg.qualification.qualification}}</div> 
           </div>
           <div class="col-md-4">
           <label>Profile Picture</label>
@@ -106,9 +122,9 @@
               id="tempImage"
               @change="previewImage($event)"
               accept="image/*"
-            >
+              :class="{ 'is-invalid': 'submitted && $v.user.photo.$error' }">
+              <div v-if="submitted && !$v.user.photo.required" class="invalid-feedback" style="display: block">{{errorMsg.photo.required}}</div>           
           </div>
-          
         </div>
         <div class="row">
           <div class="col-md-4">
@@ -118,27 +134,32 @@
               v-model="user.dob"
               :displayFormat="'DD-MM-YYYY'"
               :format="'DD-MM-YYYY'"
-              ></date-pick>
+              :isDateDisabled="isFutureDate"
+              :class="{ 'is-invalid': 'submitted && $v.user.dob.$error' }"
+            ></date-pick>
+          <div v-if="submitted && !$v.user.dob.required" class="invalid-feedback" style="display: block">{{errorMsg.dob.required}}</div>
           </div>
           <div class="col-md-4">
             <label>Gender</label>
             <br>
-            <select v-model="user.gender">
+            <select v-model="user.gender" :class="{ 'is-invalid': 'submitted && $v.user.gender.$error' }">
               <option disabled selected value>Select Gender</option>
               <option>Male</option>
               <option>Female</option>
               <option>Others</option>
             </select>
+            <div v-if="submitted && !$v.user.gender.required" class="invalid-feedback" style="display: block">{{errorMsg.gender.required}}</div>
           </div>
           <div class="col-md-4">
             <label>Martial Status</label>
             <br>
-            <select v-model="user.martialStatus">
+            <select v-model="user.martialStatus" :class="{ 'is-invalid': 'submitted && $v.user.martialStatus.$error' }">
               <option disabled selected value>Select Status</option>
               <option>Married</option>
               <option>UnMarried</option>
               <option>Divorce</option>
             </select>
+            <div v-if="submitted && !$v.user.martialStatus.required" class="invalid-feedback" style="display: block">{{errorMsg.martialStatus.required}}</div>
           </div>
         </div>
         <div class="row">
@@ -150,16 +171,26 @@
                 class="form-control border-input"
                 placeholder="Enter Area, Street No, LandMark"
                 v-model="user.address.area"
+                :validationFlag="submitted && $v.user.address.area.$error"
               ></textarea>
+              <div v-if="submitted && !$v.user.address.area.required" class="invalid-feedback" style="display: block">{{errorMsg.area.required}}</div>      
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" label="State" placeholder="State" v-model="user.address.state"></fg-input>
+            <fg-input type="text" label="State" placeholder="State" v-model="user.address.state"
+            :validationFlag="submitted && $v.user.address.state.$error"
+            ></fg-input>
+            <div v-if="submitted && !$v.user.address.state.required" class="invalid-feedback" style="display: block">{{errorMsg.state.required}}</div> 
+            <div v-if="submitted && !$v.user.address.state.alpha" class="invalid-feedback" style="display: block">{{errorMsg.state.alpha}}</div> 
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="City" placeholder="City" v-model="user.address.city"></fg-input>
+            <fg-input type="text" label="City" placeholder="City" v-model="user.address.city"
+            :validationFlag="submitted && $v.user.address.city.$error"
+            ></fg-input>
+            <div v-if="submitted && !$v.user.address.city.required" class="invalid-feedback" style="display: block">{{errorMsg.city.required}}</div> 
+            <div v-if="submitted && !$v.user.address.city.alpha" class="invalid-feedback" style="display: block">{{errorMsg.city.alpha}}</div> 
           </div>
           <div class="col-md-4">
             <fg-input
@@ -167,7 +198,12 @@
               label="Pin Code"
               placeholder="Pin Code"
               v-model="user.address.pincode"
+              :validationFlag="submitted && $v.user.address.pincode.$error"
             ></fg-input>
+            <div v-if="submitted && !$v.user.address.pincode.required" class="invalid-feedback" style="display: block">{{errorMsg.pincode.required}}</div> 
+            <div v-if="submitted && !$v.user.address.pincode.numeric" class="invalid-feedback" style="display: block">{{errorMsg.pincode.numeric}}</div> 
+            <div v-if="submitted && !$v.user.address.pincode.minLength" class="invalid-feedback" style="display: block">{{errorMsg.pincode.minLength}}</div>
+            <div v-if="submitted && !$v.user.address.pincode.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.pincode.maxLength}}</div>
           </div>
         </div>
 
@@ -188,12 +224,13 @@ import 'vue-date-pick/dist/vueDatePick.css';
 import { required, alpha, email, minLength, numeric, maxLength, sameAs, helpers } from "vuelidate/lib/validators";
 
 const pan = helpers.regex('pan', /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/)
-
+const bloodGroup = helpers.regex('bloodGroup', /^(A|B|AB|O)[+-]$/)
+const qualification = helpers.regex('qualification', /^[A-Za-z\d\s]+$/)
 //const MAX_IMG_SIZE : 500;
 
 export default {
   components: {
-     DatePick
+    DatePick
   },
   data() {
     return {
@@ -228,8 +265,15 @@ export default {
           required: "First Name is required",
           alpha: "Only alphabets are allowed"
         },
+        middleName:{
+          required: "Middle Name is required",
+          alpha: "Only alphabets are allowed"
+        },
+        lastName:{
+          required: "Last Name is required",
+          alpha: "Only alphabets are allowed"
+        },
         email: {
-          required: "email is required",
           email: "should be valid email"
         },
         phoneNum: {
@@ -238,9 +282,56 @@ export default {
           minLength: "length must be equal to 10",
           maxLength: "length must be equal to 10"
         },
+        emrgncyPhoneNum: {
+          required: "Emergency PhoneNum is required",
+          numeric: "Emergency PhoneNum must be numeric",
+          minLength: "length must be equal to 10",
+          maxLength: "length must be equal to 10"
+        },
+        aadhar: {
+          required: "Aadhar is required",
+          numeric: "Aadhar must be numeric",
+          minLength: "length must be equal to 12",
+          maxLength: "length must be equal to 12"
+        },
         pan: {
-          required: "PAN is required",
           pan: "Must be a valid PAN eg: ABCDE1234Z"
+        },
+        bloodGroup: {
+          bloodGroup: "Must be a valid Blood group eg: A, B+ ,O-, AB"
+        },
+        qualification: {
+          required: "Qualification is required",
+          qualification: "Qualification must be Alphanumeric",
+        },
+        photo:{
+          required: "Photo is required"
+        },
+        dob:{
+          required: "Date of Birth is required"
+        },
+        gender:{
+          required: "Gender is required"
+        },
+        martialStatus:{
+          required: "Martial Status is required"
+        },
+        area:{
+          required: "Area Name is required",
+        },
+        state:{
+          required: "State Name is required",
+          alpha: "Only alphabets are allowed"
+        },
+        city:{
+          required: "City Name is required",
+          alpha: "Only alphabets are allowed"
+        },
+        pincode: {
+          required: "Pincode is required",
+          numeric: "Pincode be numeric",
+          minLength: "length must be equal to 6",
+          maxLength: "length must be equal to 6"
         }
       }
     };
@@ -248,13 +339,32 @@ export default {
   validations: {
             user: {
                 firstName: { required, alpha },
-                email: { required, email },
+                middleName: { required, alpha },
+                lastName: { required, alpha },
+                email: { email },
                 phoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
-                pan: { required, pan }
+                emrgncyPhoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
+                aadhar: { required, numeric, minLength: minLength(12), maxLength: maxLength(12)},
+                pan: { pan },
+                bloodGroup: { bloodGroup },
+                qualification: { required, qualification },
+                photo: { required },
+                dob: { required },
+                gender: { required },
+                martialStatus: { required },
+                address: {
+                  area: { required },
+                  state: { required, alpha },
+                  city: { required, alpha },
+                  pincode: { required, numeric, minLength: minLength(6), maxLength: maxLength(6)}
+                }
             }
         },
   methods: {
-    
+    isFutureDate(date) {
+            const currentDate = new Date();
+            return date > currentDate;
+    },
     previewImage(event) {
       const files = event.target.files;
       if (files && first(files)) {
@@ -287,11 +397,10 @@ export default {
                 // stop here if form is invalid
                 this.$v.$touch();
                 if (this.$v.$invalid) {
-                  console.log('here',  this.$v);
+                  console.log('not saving',  this.$v);
                     return;
                 }
-
-                alert("SUCCESS!! :-)\n\n" + JSON.stringify(this.user));
+                console.log("Saving ....")
 
 
       const userObj = this.user;
