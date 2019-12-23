@@ -4,12 +4,12 @@ import NotFound from "@/pages/NotFoundPage.vue";
 
 // Admin pages
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
+import TableList from "@/pages/TableList.vue";
 import Notifications from "@/pages/Notifications.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
-import TableList from "@/pages/TableList.vue";
+import EditProfileForm from "@/pages/EditProfileForm.vue";
 
 const routes = [
   {
@@ -23,9 +23,9 @@ const routes = [
         component: Dashboard
       },
       {
-        path: "stats",
-        name: "stats",
-        component: UserProfile
+        path: "employeeManagement",
+        name: "Employee Management",
+        component: TableList
       },
       {
         path: "notifications",
@@ -51,6 +51,11 @@ const routes = [
         path: "table-list",
         name: "table-list",
         component: TableList
+      },
+      {
+        path: "editProfileForm",
+        name: "Add Employee",
+        component: EditProfileForm
       }
     ]
   },
