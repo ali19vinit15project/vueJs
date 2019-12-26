@@ -25,19 +25,13 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'name'">
-          <a href="#/editProfileForm" style="font-weight: bold; color: blue;">{{props.row.name}}</a> 
-        </span>
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
-      </template>
 
-
-      <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'edit'">        
           <router-link to="/editProfileForm" class="ti-pencil" tag="a"></router-link>&nbsp;          
-        </span>        
+        </span>  
+        <span v-else-if="props.column.field == 'photo'">        
+          <img class="w-100 rounded-circle" :src= "props.row.photo">       
+        </span> 
         <span v-else>
           {{props.formattedRow[props.column.field]}}
         </span>
@@ -97,7 +91,7 @@ export default {
   },
   methods : {
     onSearch(params) {
-     console.log(params.searchTerm);
+      console.log(params.searchTerm);
     },
     selectionChanged(){
       console.log(this.$refs['my-table'].selectedRows);
@@ -158,6 +152,10 @@ export default {
 
     setTableData(data){
       this.totalRecords = data.page.totalElements;
+      var rows = data._embedded.employees.map(emp  => {
+        /* emp.photo = `<img src="${emp.photo}">`; */
+        return emp;
+      });
       this.rows = data._embedded.employees;
     }
     // End: Methods added for Server side rendering
@@ -183,15 +181,6 @@ export default {
         {
           label: 'First Name',
           field: 'firstName',
-          /*filterOptions: {
-            enabled: true, // enable filter for this column
-            placeholder: 'Filter This Name', // placeholder for filter input
-            filterValue: '', // initial populated value for this filter
-            filterDropdownItems: [], // dropdown (with selected values) instead of text input
-            filterFn: this.columnFilterFn, //custom filter function that
-            trigger: 'enter', //only trigger on enter not on keyup 
-          },*/
-
         },
         {
           label: 'Email',
@@ -206,6 +195,12 @@ export default {
           field: 'address.area',
         },
         {
+          label: 'Photo',
+          field: 'photo',
+          html: true,
+          tdClass: 'photoParent'
+        },
+        {
           label: 'Action',
           field: 'edit',
           sortable: false,
@@ -218,7 +213,9 @@ export default {
 };
 </script>
 
-
-
 <style>
+.photoParent {
+  width: 100px;
+  height: 100px;
+}
 </style>
