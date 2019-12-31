@@ -392,27 +392,26 @@ export default {
 
     save() {
 
-                this.submitted = true;
+      this.submitted = true;
 
-                // stop here if form is invalid
-                this.$v.$touch();
-                if (this.$v.$invalid) {
-                  console.log('not saving',  this.$v);
-                    return;
-                }
-                console.log("Saving ....")
+      // stop here if form is invalid
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log('not saving',  this.$v);
+          return;
+      }
+      console.log("Saving ....")
 
 
       const userObj = this.user;
+      const router = this.$router;
       const url = "http://localhost:8090/api/employees";
       const res = axios.post(url, userObj);
       res
         .then(function(response) {
           console.log(response.data);
           console.log(response.status);
-          console.log(response.statusText);
-          console.log(response.headers);
-          console.log(response.config);
+          router.push("employeeManagement");
         })
         .catch(function(error) {
           if (error.response) {

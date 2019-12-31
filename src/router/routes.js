@@ -11,6 +11,8 @@ import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
 import EditProfileForm from "@/pages/EditProfileForm.vue";
 
+import UserProfile from "@/pages/UserProfile.vue";
+
 const routes = [
   {
     path: "/",
@@ -55,7 +57,7 @@ const routes = [
       {
         path: "editProfileForm",
         name: "Add Employee",
-        component: EditProfileForm
+        component: UserProfile
       }
     ]
   },
