@@ -133,9 +133,14 @@ export default {
     },
 
     loadItems() {
-      this.getFromServer(this.serverParams).then(response =>{
+      this.getFromServer(this.serverParams)
+      .then(response =>{
         console.log("response",response);
         this.setTableData(response.data);
+      })
+      .catch(err => {
+        console.log("Error",  err);
+        this.notifyVue('top', 'center');
       });
     },
 
@@ -157,6 +162,16 @@ export default {
         return emp;
       });
       this.rows = data._embedded.employees;
+    },
+    notifyVue(verticalAlign, horizontalAlign) {
+      this.$notify({
+        timeout: 20000,
+        message: 'Server down. Please try after some time. ',
+        icon: "ti-alert",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: "danger"
+      });
     }
     // End: Methods added for Server side rendering
   },
