@@ -1,5 +1,5 @@
 <template>
-  <card class="card" title="Add Profile">
+  <card class="card" :title="pageTitle">
     <div>
       <form @submit.prevent v-on:submit="save" action="#" method="post">
         <div class="row">
@@ -208,7 +208,8 @@
         </div>
 
         <div class="text-center">
-          <button class="btn btn-round btn-info" type="submit">Enter</button>
+          <button class="btn btn-round btn-info" type="submit">{{saveButtonTitle}}</button>&nbsp;
+          <button class="btn btn-round" type="button">Cancel</button>
         </div>
         <div class="clearfix"></div>
       </form>
@@ -232,8 +233,20 @@ export default {
   components: {
     DatePick
   },
+  props: ['empId'],
+  mounted() {
+      if (this.empId) {
+          this.pageMode = 'EDIT';
+          this.pageTitle = 'Edit Employee';
+          this.saveButtonTitle = 'Update';
+          this.fetch();
+      }
+  },
   data() {
     return {
+      pageTitle: 'Add Employee',
+      saveButtonTitle: 'Save',
+      pageMode: 'ADD',
       tempImage: "",
       isFileExist: false,
       maxImageSie: false,
@@ -389,7 +402,17 @@ export default {
       this.isFileExist = false;
       this.maxImageSie = false;
     },
-
+    fetch(){
+      
+      const url = `http://localhost:8090/api/employees/${this.empId}`;
+      
+      axios.get(url)
+      .then((response) => {
+        this.user = response.data;
+        console.log(response.data);
+      });        
+    
+    },
     save() {
 
       this.submitted = true;
@@ -406,7 +429,12 @@ export default {
       const userObj = this.user;
       const router = this.$router;
       const url = "http://localhost:8090/api/employees";
-      const res = axios.post(url, userObj);
+      let res = null;
+      if(this.pageMode === 'EDIT'){
+        res = axios.put(url + `/${userObj.id}`, userObj);
+      }else{
+        res = axios.post(url, userObj);
+      }
       res
         .then(function(response) {
           console.log(response.data);

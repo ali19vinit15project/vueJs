@@ -27,7 +27,7 @@
       <template slot="table-row" slot-scope="props">
 
         <span v-if="props.column.field == 'edit'">        
-          <router-link to="/employee" class="ti-pencil" tag="a"></router-link>&nbsp;          
+          <router-link :to="{ name: 'EmployeeProfile', params: { empId: props.row.id } }" class="ti-pencil" tag="a"></router-link>&nbsp;          
         </span>  
         <span v-else-if="props.column.field == 'photo'">        
           <img class="w-100 rounded-circle" :src= "props.row.photo">       
@@ -177,6 +177,7 @@ export default {
   },
   data(){
     return {
+      empId: 0,
       isLoading: true,
       totalRecords: 0,
       rows: [],

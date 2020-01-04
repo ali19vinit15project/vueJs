@@ -24,7 +24,7 @@ const routes = [
       },
       {
         path: "employeeManagement",
-        name: "Employee Management",
+        name: "EmployeeManagement",
         component: EmployeeManagement
       },
       {
@@ -54,8 +54,9 @@ const routes = [
       }, */
       {
         path: "employee",
-        name: "Add Employee",
-        component: EmployeeProfile
+        name: "EmployeeProfile",
+        component: EmployeeProfile,
+        props: true
       }
     ]
   },
