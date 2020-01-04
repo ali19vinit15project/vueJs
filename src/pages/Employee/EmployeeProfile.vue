@@ -1,17 +1,17 @@
 <template>
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12">
-        <edit-profile-form>
+        <employee-form>
 
-        </edit-profile-form>
+        </employee-form>
       </div>
     </div>
 </template>
 <script>
-import EditProfileForm from "./EditProfileForm.vue";
+import EmployeeForm from "./EmployeeForm.vue";
 export default {
   components: {
-    EditProfileForm
+    EmployeeForm
   }
 };
 </script>

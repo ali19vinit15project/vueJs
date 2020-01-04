@@ -21,13 +21,13 @@
       styleClass="vgt-table striped bordered"
       >
       <div slot="table-actions">
-        <router-link to="/editProfileForm" class="btn btn-primary btn-sm" tag="button">Add</router-link>&nbsp;
+        <router-link to="/employee" class="btn btn-primary btn-sm" tag="button">Add</router-link>&nbsp;
       </div>
 
       <template slot="table-row" slot-scope="props">
 
         <span v-if="props.column.field == 'edit'">        
-          <router-link to="/editProfileForm" class="ti-pencil" tag="a"></router-link>&nbsp;          
+          <router-link to="/employee" class="ti-pencil" tag="a"></router-link>&nbsp;          
         </span>  
         <span v-else-if="props.column.field == 'photo'">        
           <img class="w-100 rounded-circle" :src= "props.row.photo">       

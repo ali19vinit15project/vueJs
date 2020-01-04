@@ -1,17 +1,17 @@
 <template>
   <div>
     <h4>Employees</h4>
-    <good-table/>
+    <employees-table/>
   </div>
 </template>
 
 <script>
 
-import GoodTable from '../components/Tables/GoodTable.vue'
+import EmployeesTable from './EmployeesTable.vue'
 
 export default {
   components: {
-      GoodTable
+      EmployeesTable
   }
 }
 
