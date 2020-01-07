@@ -208,8 +208,35 @@
         </div>
 
         <div class="text-center">
+          <button class="btn btn-round float-left" type="button">Cancel</button>&nbsp;
           <button class="btn btn-round btn-info" type="submit">{{saveButtonTitle}}</button>&nbsp;
-          <button class="btn btn-round" type="button">Cancel</button>
+          <DetailsPopup v-if="isPageEditable" class ="float-right" ref="newListPopup" v-show="this.isPageEditable">
+            <template v-slot:handle>
+              <span class="nav-item btn btn-round btn-danger float-right mr-2">Delete</span>
+            </template>
+            <template v-slot:content>
+              <form>
+                <h4>Are you absolutely sure?</h4>
+                This action cannot be undone. This will permanently delete the employee. 
+                &nbsp;<br>
+                Please type 'delete' to confirm.
+                <input
+                  name="confirm"
+                  type="text"
+                  class="form-control my-1"
+                  @keyup="checkDelete"
+                />
+                <button v-if="isPageEditable" 
+                  class="btn btn-round btn-danger" 
+                  type="button"
+                  :disabled = "isConfirmDeleteDisabled"
+                  @click.prevent="deleteEmployee">
+                  Delete this employee
+                </button>
+              </form>
+            </template>
+          </DetailsPopup>
+          <!-- <button v-if="isPageEditable" class="btn btn-round btn-danger float-right" type="button">Delete</button> -->
         </div>
         <div class="clearfix"></div>
       </form>
@@ -217,6 +244,7 @@
   </card>
 </template>
 <script>
+import DetailsPopup from "../../components/Inputs/DetailsPopup"
 import { first } from "lodash";
 import axios from "axios";
 import { constants } from "fs";
@@ -231,12 +259,13 @@ const qualification = helpers.regex('qualification', /^[A-Za-z\d\s]+$/)
 
 export default {
   components: {
-    DatePick
+    DatePick,
+    DetailsPopup
   },
   props: ['empId'],
   mounted() {
       if (this.empId) {
-          this.pageMode = 'EDIT';
+          this.isPageEditable = true;
           this.pageTitle = 'Edit Employee';
           this.saveButtonTitle = 'Update';
           this.fetch();
@@ -244,9 +273,10 @@ export default {
   },
   data() {
     return {
+      isConfirmDeleteDisabled: true,
       pageTitle: 'Add Employee',
       saveButtonTitle: 'Save',
-      pageMode: 'ADD',
+      isPageEditable: false,
       tempImage: "",
       isFileExist: false,
       maxImageSie: false,
@@ -374,6 +404,15 @@ export default {
             }
         },
   methods: {
+    checkDelete(event){
+      
+      if(event.target.value === 'delete'){
+        this.isConfirmDeleteDisabled = false
+      }else{
+        this.isConfirmDeleteDisabled = true
+      }
+      
+    },
     isFutureDate(date) {
             const currentDate = new Date();
             return date > currentDate;
@@ -401,6 +440,19 @@ export default {
       this.$refs.imageUpload.value = "";
       this.isFileExist = false;
       this.maxImageSie = false;
+    },
+    deleteEmployee(){
+      debugger;
+      const url = `http://localhost:8090/api/employees/${this.empId}`;
+      
+      const router = this.$router;
+      axios.delete(url)
+      .then((response) => {
+        this.user = response.data;
+        console.log(response.data);
+        router.push("employeeManagement");
+      });        
+
     },
     fetch(){
       
@@ -430,7 +482,7 @@ export default {
       const router = this.$router;
       const url = "http://localhost:8090/api/employees";
       let res = null;
-      if(this.pageMode === 'EDIT'){
+      if(this.isPageEditable){
         res = axios.put(url + `/${userObj.id}`, userObj);
       }else{
         res = axios.post(url, userObj);

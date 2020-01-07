@@ -81,7 +81,7 @@ export default {
     },
     selectOptions(){
       return {
-        enabled: true,
+        enabled: false,
         selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
         
         selectionText: 'employees selected',
