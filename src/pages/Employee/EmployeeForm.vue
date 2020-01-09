@@ -113,17 +113,23 @@
             <div v-if="submitted && !$v.user.qualification.qualification" class="invalid-feedback" style="display: block">{{errorMsg.qualification.qualification}}</div> 
           </div>
           <div class="col-md-4">
-          <label>Profile Picture</label>
+            <label>Profile Picture</label>
             <br>
             <input
               type="file"
+              class="hidden"
               ref="imageUpload"
               label="Photo"
               id="tempImage"
               @change="previewImage($event)"
               accept="image/*"
               :class="{ 'is-invalid': 'submitted && $v.user.photo.$error' }">
+              <label for="tempImage" class="btn btn-round btn-info btn-sm btn-outline-secondary">Select image</label>
               <div v-if="submitted && !$v.user.photo.required" class="invalid-feedback" style="display: block">{{errorMsg.photo.required}}</div>           
+              <div v-if="imageMaxSizeExceded" class="invalid-feedback" style="display: block">{{errorMsg.photo.maxSize}}</div>           
+          </div>
+          <div class="col-md-4">
+            <img id="imgPreview" :src="defaultPreviewImage" ref="imgPreview" alt="your image" />
           </div>
         </div>
         <div class="row">
@@ -211,7 +217,7 @@
           
           <DetailsPopup class ="float-left" ref="confirmCancelPopup">
             <template v-slot:handle>
-              <span class="nav-item btn btn-round float-left float-left mr-2">Cancel</span>
+              <span class="nav-item btn btn-round float-left mr-2">Cancel</span>
             </template>
             <template v-slot:content>
               <form>
@@ -287,13 +293,14 @@ export default {
   },
   data() {
     return {
+      IMAGE_MAX_SIZE_IN_KB: 500,
+      imageMaxSizeExceded: false,
+      defaultPreviewImage: 'http://placehold.it/1',
       isConfirmDeleteDisabled: true,
       pageTitle: 'Add Employee',
       saveButtonTitle: 'Save',
       isPageEditable: false,
       tempImage: "",
-      isFileExist: false,
-      maxImageSie: false,
       user: {
         firstName: "",
         lastName: "",
@@ -362,7 +369,8 @@ export default {
           qualification: "Qualification must be Alphanumeric",
         },
         photo:{
-          required: "Photo is required"
+          required: "Photo is required",
+          maxSize: 'Please select image below 500 kb'
         },
         dob:{
           required: "Date of Birth is required"
@@ -436,14 +444,16 @@ export default {
     previewImage(event) {
       const files = event.target.files;
       if (files && first(files)) {
-        this.isFileExist = true;
-        if (files[0].size / 1024 > 500) {
-          this.maxImageSie = true;
+        if (files[0].size / 1024 > this.IMAGE_MAX_SIZE_IN_KB) {
+          this.imageMaxSizeExceded = true;
+          this.clearImg();
         } else {
-          this.maxImageSie = false;
+          this.imageMaxSizeExceded = false;
           const reader = new FileReader();
           reader.onload = evt => {
             this.user.photo = evt.target.result;
+            console.log(this.$refs.blah)
+              this.$refs.imgPreview.src = evt.target.result
           };
           reader.readAsDataURL(first(files));
         }
@@ -454,8 +464,7 @@ export default {
     
     clearImg() {
       this.$refs.imageUpload.value = "";
-      this.isFileExist = false;
-      this.maxImageSie = false;
+      this.$refs.imgPreview.src = this.defaultPreviewImage;
     },
     deleteEmployee(){
       const url = `http://localhost:8090/api/employees/${this.empId}`;
@@ -480,6 +489,7 @@ export default {
       axios.get(url)
       .then((response) => {
         this.user = response.data;
+        this.$refs.imgPreview.src = this.user.photo;
         console.log(response.data);
       });        
     
@@ -549,4 +559,13 @@ export default {
 };
 </script>
 <style>
+img{
+  max-width:100px;
+}
+input[type=file]{
+  padding: 5px;
+}
+.hidden{
+  display: none;
+}
 </style>
