@@ -208,9 +208,23 @@
         </div>
 
         <div class="text-center">
-          <button class="btn btn-round float-left" type="button">Cancel</button>&nbsp;
+          
+          <DetailsPopup class ="float-left" ref="confirmCancelPopup">
+            <template v-slot:handle>
+              <span class="nav-item btn btn-round float-left float-left mr-2">Cancel</span>
+            </template>
+            <template v-slot:content>
+              <form>
+                <h4>Are you sure want to cancel?</h4>
+                <router-link to="/employeeManagement" class="btn btn-round btn-danger " tag="button">Yes</router-link>&nbsp;
+                <button class="btn btn-round btn-info" type="submit" @click="closePopup">Close</button>&nbsp;
+              </form>
+            </template>
+          </DetailsPopup>
+
           <button class="btn btn-round btn-info" type="submit">{{saveButtonTitle}}</button>&nbsp;
-          <DetailsPopup v-if="isPageEditable" class ="float-right" ref="newListPopup" v-show="this.isPageEditable">
+          
+          <DetailsPopup v-if="isPageEditable" class ="float-right" ref="confirmDeletePopup" v-show="this.isPageEditable">
             <template v-slot:handle>
               <span class="nav-item btn btn-round btn-danger float-right mr-2">Delete</span>
             </template>
@@ -404,6 +418,9 @@ export default {
             }
         },
   methods: {
+    closePopup(){
+      this.$refs.confirmCancelPopup.close();
+    },
     checkDelete(event){
       
       if(event.target.value === 'delete'){
@@ -411,7 +428,6 @@ export default {
       }else{
         this.isConfirmDeleteDisabled = true
       }
-      
     },
     isFutureDate(date) {
             const currentDate = new Date();
@@ -442,14 +458,17 @@ export default {
       this.maxImageSie = false;
     },
     deleteEmployee(){
-      debugger;
       const url = `http://localhost:8090/api/employees/${this.empId}`;
       
       const router = this.$router;
+      const notifyVue = this.notifyVue;
+      let msg = 'Data deleted Successfully';
+
       axios.delete(url)
       .then((response) => {
         this.user = response.data;
         console.log(response.data);
+        notifyVue(msg);
         router.push("employeeManagement");
       });        
 
@@ -466,7 +485,7 @@ export default {
     
     },
     save() {
-
+              
       this.submitted = true;
 
       // stop here if form is invalid
@@ -477,20 +496,24 @@ export default {
       }
       console.log("Saving ....")
 
-
       const userObj = this.user;
       const router = this.$router;
+      const notifyVue = this.notifyVue;
+      let msg = '';
       const url = "http://localhost:8090/api/employees";
       let res = null;
       if(this.isPageEditable){
         res = axios.put(url + `/${userObj.id}`, userObj);
+        msg = 'Data updated successfully';
       }else{
         res = axios.post(url, userObj);
+        msg = 'Data added successfully';
       }
       res
         .then(function(response) {
           console.log(response.data);
           console.log(response.status);
+          notifyVue(msg);
           router.push("employeeManagement");
         })
         .catch(function(error) {
@@ -511,6 +534,16 @@ export default {
           }
           console.log(error.config);
         });
+    },
+    notifyVue(msg) {
+      this.$notify({
+        timeout: 10000,
+        message: msg,
+        icon: "ti-check",
+        horizontalAlign: 'center',
+        verticalAlign: 'top',
+        type: "success"
+      });
     }
   }
 };
