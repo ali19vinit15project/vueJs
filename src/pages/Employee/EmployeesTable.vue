@@ -61,7 +61,6 @@ export default {
         perPageDropdown: [5, 10, 20, 50 ],
         dropdownAllowAll: false,
         rowsPerPageLabel: 'Employees per page',
-        mode: 'pages',
       }
     },
     sortOptions() {
@@ -111,7 +110,7 @@ export default {
 
     onPerPageChange(params) {
       console.log("onPerPageChange-",params.currentPerPage);
-      this.updateParams({perPage: params.currentPerPage});
+      this.updateParams({perPage: params.currentPerPage, page: 1});
       this.loadItems();
     },
 
@@ -157,10 +156,6 @@ export default {
 
     setTableData(data){
       this.totalRecords = data.page.totalElements;
-      var rows = data._embedded.employees.map(emp  => {
-        /* emp.photo = `<img src="${emp.photo}">`; */
-        return emp;
-      });
       this.rows = data._embedded.employees;
     },
     notifyVue(verticalAlign, horizontalAlign) {
