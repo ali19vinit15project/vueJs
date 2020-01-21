@@ -126,7 +126,7 @@
               :class="{ 'is-invalid': 'submitted && $v.user.photo.$error' }">
               <label for="tempImage" class="btn btn-round btn-info btn-sm btn-outline-secondary">Select image</label>
               <div v-if="submitted && !$v.user.photo.required" class="invalid-feedback" style="display: block">{{errorMsg.photo.required}}</div>           
-              <div v-if="imageMaxSizeExceded" class="invalid-feedback" style="display: block">{{errorMsg.photo.maxSize}}</div>           
+                 
           </div>
           <div class="col-md-4">
             <img id="imgPreview" :src="defaultPreviewImage" ref="imgPreview" alt="your image" />
@@ -271,11 +271,11 @@ import { constants } from "fs";
 import DatePick from 'vue-date-pick';
 import 'vue-date-pick/dist/vueDatePick.css';
 import { required, alpha, email, minLength, numeric, maxLength, sameAs, helpers } from "vuelidate/lib/validators";
+import Compressor from 'compressorjs';
 
 const pan = helpers.regex('pan', /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/)
 const bloodGroup = helpers.regex('bloodGroup', /^(A|B|AB|O)[+-]$/)
 const qualification = helpers.regex('qualification', /^[A-Za-z\d\s]+$/)
-//const MAX_IMG_SIZE : 500;
 
 export default {
   components: {
@@ -293,8 +293,6 @@ export default {
   },
   data() {
     return {
-      IMAGE_MAX_SIZE_IN_KB: 500,
-      imageMaxSizeExceded: false,
       defaultPreviewImage: 'http://placehold.it/1',
       isConfirmDeleteDisabled: true,
       pageTitle: 'Add Employee',
@@ -369,8 +367,7 @@ export default {
           qualification: "Qualification must be Alphanumeric",
         },
         photo:{
-          required: "Photo is required",
-          maxSize: 'Please select image below 500 kb'
+          required: "Photo is required"
         },
         dob:{
           required: "Date of Birth is required"
@@ -444,24 +441,36 @@ export default {
     previewImage(event) {
       const files = event.target.files;
       if (files && first(files)) {
-        if (files[0].size / 1024 > this.IMAGE_MAX_SIZE_IN_KB) {
-          this.imageMaxSizeExceded = true;
-          this.clearImg();
-        } else {
-          this.imageMaxSizeExceded = false;
-          const reader = new FileReader();
-          reader.onload = evt => {
-            this.user.photo = evt.target.result;
-            console.log(this.$refs.blah)
-              this.$refs.imgPreview.src = evt.target.result
-          };
-          reader.readAsDataURL(first(files));
-        }
+        
+          this.compressorImage(files[0], this);
+        
       } else {
         this.clearImg();
       }
     },
-    
+    compressorImage(file, that) {
+      
+      new Compressor(file, {
+          quality: 0.1,
+          maxWidth: 500,
+          maxHeight: 500,
+          success(result) {
+            const reader = new FileReader();
+            reader.readAsDataURL(result); 
+
+            reader.onload = evt => {
+              console.log('onload',evt);
+              that.user.photo = evt.target.result;
+              that.$refs.imgPreview.src = evt.target.result 
+            };
+          },
+          error(err) {
+            console.log(err.message);
+          },
+        });
+        
+      
+    },
     clearImg() {
       this.$refs.imageUpload.value = "";
       this.$refs.imgPreview.src = this.defaultPreviewImage;
