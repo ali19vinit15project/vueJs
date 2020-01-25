@@ -203,7 +203,7 @@ export default {
         },
         {
           label: 'Address',
-          field: 'address.area',
+          field: 'address.city',
         },
         {
           label: 'Photo',
