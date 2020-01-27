@@ -123,7 +123,7 @@
               id="tempImage"
               @change="previewImage($event)"
               accept="image/*"
-              :class="{ 'is-invalid': 'submitted && $v.user.photo.$error' }">
+              :class="{ 'is-invalid': submitted && $v.user.photo.$error }">
               <label for="tempImage" class="btn btn-round btn-info btn-sm btn-outline-secondary">Select image</label>
               <div v-if="submitted && !$v.user.photo.required" class="invalid-feedback" style="display: block">{{errorMsg.photo.required}}</div>           
                  
@@ -137,18 +137,23 @@
             <label>Date Of Birth</label>
             <br>
             <date-pick
+              style="display: inherit"
+              ref="dob-date-picker"
               v-model="user.dob"
               :displayFormat="'DD-MM-YYYY'"
               :format="'DD-MM-YYYY'"
               :isDateDisabled="isFutureDate"
-              :class="{ 'is-invalid': 'submitted && $v.user.dob.$error' }"
+              :class="{ 'is-invalid': submitted && $v.user.dob.$error}"
             ></date-pick>
           <div v-if="submitted && !$v.user.dob.required" class="invalid-feedback" style="display: block">{{errorMsg.dob.required}}</div>
           </div>
           <div class="col-md-4">
             <label>Gender</label>
             <br>
-            <select v-model="user.gender" :class="{ 'is-invalid': 'submitted && $v.user.gender.$error' }">
+            <select v-model="user.gender" :class="{ 
+              'is-invalid': submitted && $v.user.gender.$error,
+              'custom-select':true
+              }">
               <option disabled selected value>Select Gender</option>
               <option>Male</option>
               <option>Female</option>
@@ -159,7 +164,9 @@
           <div class="col-md-4">
             <label>Martial Status</label>
             <br>
-            <select v-model="user.martialStatus" :class="{ 'is-invalid': 'submitted && $v.user.martialStatus.$error' }">
+            <select v-model="user.martialStatus" :class="{ 'is-invalid': submitted && $v.user.martialStatus.$error,
+              'custom-select':true }"
+            >
               <option disabled selected value>Select Status</option>
               <option>Married</option>
               <option>UnMarried</option>
@@ -290,6 +297,8 @@ export default {
           this.saveButtonTitle = 'Update';
           this.fetch();
       }
+      this.$refs['dob-date-picker'].$el.children[0].className = 'form-control';
+      this.$refs['dob-date-picker'].$el.children[0].placeholder = 'Date of Birth'; 
   },
   data() {
     return {
@@ -339,20 +348,20 @@ export default {
           email: "should be valid email"
         },
         phoneNum: {
-          required: "phoneNum is required",
-          numeric: "phoneNum must be numeric",
+          required: "Phone Number is required",
+          numeric: "Phone Number be numeric",
           minLength: "length must be equal to 10",
           maxLength: "length must be equal to 10"
         },
         emrgncyPhoneNum: {
-          required: "Emergency PhoneNum is required",
-          numeric: "Emergency PhoneNum must be numeric",
+          required: "Emergency Phone Number is required",
+          numeric: "Emergency Phone Number must be numeric",
           minLength: "length must be equal to 10",
           maxLength: "length must be equal to 10"
         },
         aadhar: {
-          required: "Aadhar is required",
-          numeric: "Aadhar must be numeric",
+          required: "Aadhar Number is required",
+          numeric: "Aadhar Number must be numeric",
           minLength: "length must be equal to 12",
           maxLength: "length must be equal to 12"
         },
@@ -577,4 +586,5 @@ input[type=file]{
 .hidden{
   display: none;
 }
+
 </style>
