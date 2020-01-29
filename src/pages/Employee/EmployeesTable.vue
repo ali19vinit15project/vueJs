@@ -25,16 +25,10 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-
-        <span v-if="props.column.field == 'edit'">        
-          <router-link :to="{ name: 'EmployeeProfile', params: { empId: props.row.id } }" class="ti-pencil" tag="a"></router-link>&nbsp;          
-        </span>  
-        <span v-else-if="props.column.field == 'photo'">        
-          <img class="w-100 rounded-circle" :src= "props.row.photo">       
-        </span> 
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
+        <span v-if="props.column.field == 'edit'"><router-link :to="{ name: 'EmployeeProfile', params: { empId: props.row.id } }" class="ti-pencil" tag="a"></router-link>&nbsp;</span>  
+        <span v-else-if="props.column.field == 'photo'"><img class="w-100 rounded-circle" :src= "props.row.photo"></span>
+        <span v-else-if="props.column.field == 'firstName'">{{props.formattedRow[props.column.field]}} {{props.row.lastName}}</span> 
+        <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
     </vue-good-table>
   </div>
@@ -75,7 +69,7 @@ export default {
       return {
         enabled: true,
         skipDiacritics: true,
-        placeholder: 'Search Employee ',
+        placeholder: 'Search Employee by First name OR Last name OR City',
       }
     },
     selectOptions(){
@@ -91,6 +85,8 @@ export default {
   methods : {
     onSearch(params) {
       console.log(params.searchTerm);
+      this.updateParams({q: params.searchTerm});
+      this.loadItems();
     },
     selectionChanged(){
       console.log(this.$refs['my-table'].selectedRows);
@@ -145,8 +141,9 @@ export default {
 
     getFromServer(serverParams) {
       console.log("getFromServer", serverParams);
-      const url = "http://localhost:8090/api/employees";
+      const url = "http://localhost:8090/api/employees/search/searchBy";
       const params = {
+        q: serverParams.q,
         size: serverParams.perPage,
         page: serverParams.page - 1,
         sort: `${serverParams.sort[0].field},${serverParams.sort[0].type}`,
@@ -185,12 +182,13 @@ export default {
           type: 'asc', // 'asc' or 'desc'
         },
         page: 1, // what page I want to show
-        perPage: 5 // how many items I'm showing per page
+        perPage: 5, // how many items I'm showing per page
+        q: ''
       },
 
       columns: [
         {
-          label: 'First Name',
+          label: 'Name',
           field: 'firstName',
         },
         {
