@@ -141,7 +141,7 @@ export default {
 
     getFromServer(serverParams) {
       console.log("getFromServer", serverParams);
-      const url = "http://localhost:8090/api/employees/search/searchBy";
+      const url = "http://localhost:8090/api/employees/search/globalSearch";
       const params = {
         q: serverParams.q,
         size: serverParams.perPage,

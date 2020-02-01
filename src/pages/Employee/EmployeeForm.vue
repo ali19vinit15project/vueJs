@@ -37,10 +37,13 @@
 
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" 
-            label="Email" placeholder="Email Address" 
+            <fg-input 
+            type="text" 
+            label="Email" 
+            placeholder="Email Address" 
             v-model="user.email"
             :validationFlag="submitted && $v.user.email.$error"
+            @change="validateEmail"
             ></fg-input>
           <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div> 
           </div>
@@ -51,6 +54,7 @@
               placeholder="Phone Number"
               v-model="user.phoneNum"
               :validationFlag="submitted && $v.user.phoneNum.$error"
+              @change="validatePhoneNum"
             ></fg-input>
             <div v-if="submitted && !$v.user.phoneNum.required" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.required}}</div> 
             <div v-if="submitted && !$v.user.phoneNum.numeric" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.numeric}}</div> 
@@ -74,8 +78,13 @@
 
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" label="Aadhar" placeholder="Aadhar Card" v-model="user.aadhar"
-            :validationFlag="submitted && $v.user.aadhar.$error"
+            <fg-input
+              type="text" 
+              label="Aadhar" 
+              placeholder="Aadhar Card" 
+              v-model="user.aadhar"
+              :validationFlag="submitted && $v.user.aadhar.$error"
+              @change="validateAadhar"
             ></fg-input>
             <div v-if="submitted && !$v.user.aadhar.required" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.required}}</div> 
             <div v-if="submitted && !$v.user.aadhar.numeric" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.numeric}}</div> 
@@ -84,8 +93,13 @@
 
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="PAN No." placeholder="PAN No." v-model="user.pan"
-            :validationFlag="submitted && $v.user.pan.$error"
+            <fg-input 
+              type="text" 
+              label="PAN No." 
+              placeholder="PAN No." 
+              v-model="user.pan"
+              :validationFlag="submitted && $v.user.pan.$error"
+              @change="validatePanNo"
             ></fg-input>
           <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div>        
           </div>
@@ -432,6 +446,32 @@ export default {
             }
         },
   methods: {
+    
+    getFromServer(path) {
+      console.log("getFromServer", path);
+      const url = "http://localhost:8090/api/employees/search" + path;
+     return axios.get(url);        
+    },
+    validateAadhar(aadhar) {
+      console.log("response====>",aadhar);
+      this.getFromServer('/byAadhar?q='+aadhar)
+      .then(response =>{
+        console.log("response",response);
+      })
+      .catch(err => {
+        console.log("Error",  err);
+      });
+
+    },
+    validatePanNo() {
+
+    },
+    validatePhoneNum() {
+
+    },
+    validateEmail() {
+
+    },
     closePopup(){
       this.$refs.confirmCancelPopup.close();
     },
@@ -539,18 +579,21 @@ export default {
       }
       res
         .then(function(response) {
+          //200
           console.log(response.data);
           console.log(response.status);
           notifyVue(msg);
           router.push("employeeManagement");
         })
-        .catch(function(error) {
+        .catch(error => {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
             console.log(error.response.data);
-            console.log(error.response.status);
+            console.log('api errors=====');
+            console.log('this', this);
             console.log(error.response.headers);
+            this.handleServerValidation(error);
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -562,6 +605,14 @@ export default {
           }
           console.log(error.config);
         });
+    },
+    handleServerValidation(error) {
+      const errorRes = error.response.data;
+      const errorMsg = errorRes.cause.cause.message;
+      errorMsg.split
+      console.log("only error", error.response.data);
+      console.log('this.$v', this.$v);
+
     },
     notifyVue(msg) {
       this.$notify({

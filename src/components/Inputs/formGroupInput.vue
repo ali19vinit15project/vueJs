@@ -16,7 +16,9 @@
       v-bind="$attrs"
       class="form-control"
       aria-describedby="addon-right addon-left"
-      :class="{ 'is-invalid': validationFlag }" >
+      :class="{ 'is-invalid': validationFlag }"
+      @change="$emit('change',$event.target.value)"
+       >
 
     <slot></slot>
     
