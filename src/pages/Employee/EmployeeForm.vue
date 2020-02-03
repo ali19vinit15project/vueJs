@@ -158,7 +158,6 @@
               :displayFormat="'DD-MM-YYYY'"
               :format="'DD-MM-YYYY'"
               :isDateDisabled="isFutureDate"
-              :class="{ 'is-invalid': submitted && $v.user.dob.$error}"
             ></date-pick>
           <div v-if="submitted && !$v.user.dob.required" class="invalid-feedback" style="display: block">{{errorMsg.dob.required}}</div>
           </div>
@@ -199,7 +198,7 @@
                 class="form-control border-input"
                 placeholder="Enter Area, Street No, LandMark"
                 v-model="user.address.area"
-                :validationFlag="submitted && $v.user.address.area.$error"
+                :class="{ 'is-invalid': submitted && $v.user.address.area.$error }"
               ></textarea>
               <div v-if="submitted && !$v.user.address.area.required" class="invalid-feedback" style="display: block">{{errorMsg.area.required}}</div>      
             </div>
