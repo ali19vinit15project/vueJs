@@ -570,7 +570,7 @@ export default {
       .then((response) => {
         this.user = response.data;
         console.log(response.data);
-        notifyVue(msg);
+        notifyVue(msg,"success","ti-check");
         router.push("employeeManagement");
       });        
 
@@ -595,7 +595,8 @@ export default {
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log('not saving',  this.$v);
-          return;
+        this.notifyVue("Error saving ","danger",'ti-info-alt');
+        return;
       }
       console.log("Saving ....")
 
@@ -617,7 +618,7 @@ export default {
           //200
           console.log(response.data);
           console.log(response.status);
-          notifyVue(msg);
+          notifyVue(msg,"success","ti-check");
           router.push("employeeManagement");
         })
         .catch(error => {
@@ -649,14 +650,14 @@ export default {
       console.log('this.$v', this.$v);
 
     },
-    notifyVue(msg) {
+    notifyVue(msg,type,icon) {
       this.$notify({
         timeout: 10000,
         message: msg,
-        icon: "ti-check",
+        icon: icon,
         horizontalAlign: 'center',
         verticalAlign: 'top',
-        type: "success"
+        type: type
       });
     }
   }
