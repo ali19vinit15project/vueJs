@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col-md-4">
             <fg-input
+              :requireflag = true
               type="text"
-              require
               label="First Name"
               placeholder="First Name"
               v-model="user.firstName"
@@ -17,6 +17,7 @@
           </div>
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text"
               label="Middle Name"
               placeholder="Middle Name"
@@ -27,7 +28,7 @@
           <div v-if="submitted && !$v.user.middleName.alpha" class="invalid-feedback" style="display: block">{{errorMsg.middleName.alpha}}</div>
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="Last Name" placeholder="Last Name" v-model="user.lastName"
+            <fg-input :requireflag=true type="text" label="Last Name" placeholder="Last Name" v-model="user.lastName"
             :validationFlag="submitted && $v.user.lastName.$error"
             ></fg-input>
             <div v-if="submitted && !$v.user.lastName.required" class="invalid-feedback" style="display: block">{{errorMsg.lastName.required}}</div> 
@@ -50,8 +51,9 @@
           </div>
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text"
-              label="Phome Number"
+              label="Phone Number"
               placeholder="Phone Number"
               v-model="user.phoneNum"
               :validationFlag="submitted && $v.user.phoneNum.$error"
@@ -65,6 +67,7 @@
           </div>
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text"
               label="Emergency Phone Number"
               placeholder="Emergency Phone"
@@ -81,6 +84,7 @@
         <div class="row">
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text" 
               label="Aadhar" 
               placeholder="Aadhar Card" 
@@ -120,6 +124,7 @@
         <div class="row">
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text"
               label="Qualification"
               placeholder="Qualification"
@@ -131,6 +136,7 @@
           </div>
           <div class="col-md-4">
             <label>Profile Picture</label>
+            <span style = "color:red"> *</span>
             <br>
             <input
               type="file"
@@ -143,7 +149,6 @@
               :class="{ 'is-invalid': submitted && $v.user.photo.$error }">
               <label for="tempImage" class="btn btn-round btn-info btn-sm btn-outline-secondary">Select image</label>
               <div v-if="submitted && !$v.user.photo.required" class="invalid-feedback" style="display: block">{{errorMsg.photo.required}}</div>           
-                 
           </div>
           <div class="col-md-4">
             <img id="imgPreview" :src="defaultPreviewImage" ref="imgPreview" alt="your image" />
@@ -152,6 +157,7 @@
         <div class="row">
           <div class="col-md-4">
             <label>Date Of Birth</label>
+            <span style = "color:red"> *</span>
             <br>
             <date-pick
               style="display: inherit"
@@ -165,6 +171,7 @@
           </div>
           <div class="col-md-4">
             <label>Gender</label>
+            <span style = "color:red"> *</span>
             <br>
             <select v-model="user.gender" :class="{ 
               'is-invalid': submitted && $v.user.gender.$error,
@@ -179,6 +186,7 @@
           </div>
           <div class="col-md-4">
             <label>Martial Status</label>
+            <span style = "color:red"> *</span>
             <br>
             <select v-model="user.martialStatus" :class="{ 'is-invalid': submitted && $v.user.martialStatus.$error,
               'custom-select':true }"
@@ -195,6 +203,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Address</label>
+              <span style = "color:red"> *</span>
               <textarea
                 rows="3"
                 class="form-control border-input"
@@ -208,14 +217,14 @@
         </div>
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text" label="State" placeholder="State" v-model="user.address.state"
+            <fg-input :requireflag=true type="text" label="State" placeholder="State" v-model="user.address.state"
             :validationFlag="submitted && $v.user.address.state.$error"
             ></fg-input>
             <div v-if="submitted && !$v.user.address.state.required" class="invalid-feedback" style="display: block">{{errorMsg.state.required}}</div> 
             <div v-if="submitted && !$v.user.address.state.alpha" class="invalid-feedback" style="display: block">{{errorMsg.state.alpha}}</div> 
           </div>
           <div class="col-md-4">
-            <fg-input type="text" label="City" placeholder="City" v-model="user.address.city"
+            <fg-input :requireflag=true type="text" label="City" placeholder="City" v-model="user.address.city"
             :validationFlag="submitted && $v.user.address.city.$error"
             ></fg-input>
             <div v-if="submitted && !$v.user.address.city.required" class="invalid-feedback" style="display: block">{{errorMsg.city.required}}</div> 
@@ -223,6 +232,7 @@
           </div>
           <div class="col-md-4">
             <fg-input
+              :requireflag=true
               type="text"
               label="Pin Code"
               placeholder="Pin Code"

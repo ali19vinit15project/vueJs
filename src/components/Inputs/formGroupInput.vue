@@ -3,6 +3,7 @@
     <slot name="label">
       <label v-if="label" class="control-label">
         {{label}}
+        <span v-if="requireflag" style = "color:red">*</span>
       </label>
     </slot>
     <slot name="addonLeft">
@@ -39,6 +40,7 @@
       addonRightIcon: String,
       addonLeftIcon: String,
       validationFlag: Boolean,
+      requireflag: Boolean,
     },
     computed: {
       hasIcon() {
