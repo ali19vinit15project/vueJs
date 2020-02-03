@@ -45,7 +45,8 @@
             :validationFlag="submitted && $v.user.email.$error"
             @change="validateEmail"
             ></fg-input>
-          <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div> 
+          <div v-if="submitted && !$v.user.email.email" class="invalid-feedback" style="display: block">{{errorMsg.email.email}}</div>
+          <div v-if="!$v.user.email.emailServersideRule" class="invalid-feedback" style="display: block">{{errorMsg.email.emailServersideRule}}</div>
           </div>
           <div class="col-md-4">
             <fg-input
@@ -60,6 +61,7 @@
             <div v-if="submitted && !$v.user.phoneNum.numeric" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.numeric}}</div> 
             <div v-if="submitted && !$v.user.phoneNum.minLength" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.minLength}}</div>
             <div v-if="submitted && !$v.user.phoneNum.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.maxLength}}</div>
+            <div v-if="!$v.user.phoneNum.phoneNumServersideRule" class="invalid-feedback" style="display: block">{{errorMsg.phoneNum.phoneNumServersideRule}}</div>
           </div>
           <div class="col-md-4">
             <fg-input
@@ -347,7 +349,9 @@ export default {
       submitted: false,
       serverSideValidations: {
         isAadharValid: true,
-        isPanValid: true
+        isPanValid: true,
+        isPhoneNumValid: true,
+        isEmailValid: true
       },
       errorMsg: {
         firstName:{
@@ -363,13 +367,15 @@ export default {
           alpha: "Only alphabets are allowed"
         },
         email: {
-          email: "should be valid email"
+          email: "should be valid email",
+          emailServersideRule: "Email already Present"
         },
         phoneNum: {
           required: "Phone Number is required",
           numeric: "Phone Number be numeric",
           minLength: "length must be equal to 10",
-          maxLength: "length must be equal to 10"
+          maxLength: "length must be equal to 10",
+          phoneNumServersideRule: "Phone Number already Present"
         },
         emrgncyPhoneNum: {
           required: "Emergency Phone Number is required",
@@ -432,8 +438,14 @@ export default {
                 firstName: { required, alpha },
                 middleName: { required, alpha },
                 lastName: { required, alpha },
-                email: { email },
-                phoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
+                email: { email ,
+                emailServersideRule: function() {
+                    return this.serverSideValidations.isEmailValid;
+                  }},
+                phoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10),
+                phoneNumServersideRule: function() {
+                    return this.serverSideValidations.isPhoneNumValid;
+                  }},
                 emrgncyPhoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
                 aadhar: { required, numeric, minLength: minLength(12), maxLength: maxLength(12), 
                   aadharServersideRule: function() {
@@ -479,18 +491,20 @@ export default {
         });
     },
     validateAadhar(aadhar) {
-      const path = `/byAadhar?q=${aadhar}&id=${this.user.id}`;
+      const path = `/byAadhar?q=${aadhar}&id=${this.user.id | -1}`;
       this.handleServerSideValidation(path,'isAadharValid');
     },
     validatePan(pan) {
-      const path = `/byPan?q=${pan}&id=${this.user.id}`;
+      const path = `/byPan?q=${pan}&id=${this.user.id | -1}`;
       this.handleServerSideValidation(path, 'isPanValid');
     },
-    validatePhoneNum() {
-
+    validatePhoneNum(phoneNum) {
+      const path = `/byPhoneNum?q=${phoneNum}&id=${this.user.id | -1}`;
+      this.handleServerSideValidation(path, 'isPhoneNumValid');
     },
-    validateEmail() {
-
+    validateEmail(email) {
+      const path = `/byEmail?q=${email}&id=${this.user.id | -1}`;
+      this.handleServerSideValidation(path, 'isEmailValid');
     },
     closePopup(){
       this.$refs.confirmCancelPopup.close();
