@@ -90,7 +90,7 @@
             <div v-if="submitted && !$v.user.aadhar.numeric" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.numeric}}</div> 
             <div v-if="submitted && !$v.user.aadhar.minLength" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.minLength}}</div>
             <div v-if="submitted && !$v.user.aadhar.maxLength" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.maxLength}}</div>
-
+            <div v-if="!$v.user.aadhar.aadharServersideRule" class="invalid-feedback" style="display: block">{{errorMsg.aadhar.aadharServersideRule}}</div>
           </div>
           <div class="col-md-4">
             <fg-input 
@@ -99,9 +99,10 @@
               placeholder="PAN No." 
               v-model="user.pan"
               :validationFlag="submitted && $v.user.pan.$error"
-              @change="validatePanNo"
+              @change="validatePan"
             ></fg-input>
-          <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div>        
+          <div v-if="submitted && !$v.user.pan.pan" class="invalid-feedback" style="display: block">{{errorMsg.pan.pan}}</div>
+          <div v-if="!$v.user.pan.panServersideRule" class="invalid-feedback" style="display: block">{{errorMsg.pan.panServersideRule}}</div>
           </div>
           <div class="col-md-4">
             <fg-input
@@ -345,6 +346,10 @@ export default {
         }
       },
       submitted: false,
+      serverSideValidations: {
+        isAadharValid: true,
+        isPanValid: true
+      },
       errorMsg: {
         firstName:{
           required: "First Name is required",
@@ -377,10 +382,12 @@ export default {
           required: "Aadhar Number is required",
           numeric: "Aadhar Number must be numeric",
           minLength: "length must be equal to 12",
-          maxLength: "length must be equal to 12"
+          maxLength: "length must be equal to 12",
+          aadharServersideRule: "Aadhar already Present"
         },
         pan: {
-          pan: "Must be a valid PAN eg: ABCDE1234Z"
+          pan: "Must be a valid PAN eg: ABCDE1234Z",
+          panServersideRule: "Pan already Present"
         },
         bloodGroup: {
           bloodGroup: "Must be a valid Blood group eg: A, B+ ,O-, AB"
@@ -429,8 +436,14 @@ export default {
                 email: { email },
                 phoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
                 emrgncyPhoneNum: { required, numeric, minLength: minLength(10), maxLength: maxLength(10)},
-                aadhar: { required, numeric, minLength: minLength(12), maxLength: maxLength(12)},
-                pan: { pan },
+                aadhar: { required, numeric, minLength: minLength(12), maxLength: maxLength(12), 
+                  aadharServersideRule: function() {
+                    return this.serverSideValidations.isAadharValid;
+                  }},
+                pan: { pan,
+                  panServersideRule: function() {
+                    return this.serverSideValidations.isPanValid;
+                  }},
                 bloodGroup: { bloodGroup },
                 qualification: { required, qualification },
                 photo: { required },
@@ -448,23 +461,31 @@ export default {
   methods: {
     
     getFromServer(path) {
-      console.log("getFromServer", path);
-      const url = "http://localhost:8090/api/employees/search" + path;
-     return axios.get(url);        
+      console.log("getFromServer path:", path);
+      const url = `http://localhost:8090/api/employees/search${path}`;
+      return axios.get(url);        
+    },
+    handleServerSideValidation(path, validationFlag) {
+      console.log('validationFlag:', validationFlag)
+      this.getFromServer(path)
+        .then(response => {
+
+          console.log("response.data:", response.data);
+          const isFieldDuplicate = response.data;
+          const fieldValidationSuccess = !isFieldDuplicate;
+          this.serverSideValidations[validationFlag] = fieldValidationSuccess;
+        })
+        .catch(err => {
+          console.log("handleServerSideValidation Error",  err);
+        });
     },
     validateAadhar(aadhar) {
-      console.log("response====>",aadhar);
-      this.getFromServer('/byAadhar?q='+aadhar)
-      .then(response =>{
-        console.log("response",response);
-      })
-      .catch(err => {
-        console.log("Error",  err);
-      });
-
+      const path = `/byAadhar?q=${aadhar}&id=${this.user.id}`;
+      this.handleServerSideValidation(path,'isAadharValid');
     },
-    validatePanNo() {
-
+    validatePan(pan) {
+      const path = `/byPan?q=${pan}&id=${this.user.id}`;
+      this.handleServerSideValidation(path, 'isPanValid');
     },
     validatePhoneNum() {
 
@@ -475,7 +496,8 @@ export default {
     closePopup(){
       this.$refs.confirmCancelPopup.close();
     },
-    checkDelete(event){
+
+    checkDelete(event) {
       
       if(event.target.value === 'delete'){
         this.isConfirmDeleteDisabled = false
