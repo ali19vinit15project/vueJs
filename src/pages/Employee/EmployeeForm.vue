@@ -256,7 +256,6 @@
               <form>
                 <h4>Are you sure want to cancel?</h4>
                 <router-link to="/employeeManagement" class="btn btn-round btn-danger " tag="button">Yes</router-link>&nbsp;
-                <button class="btn btn-round btn-info" type="submit" @click="closePopup">Close</button>&nbsp;
               </form>
             </template>
           </DetailsPopup>
