@@ -20,10 +20,11 @@
     "vue": "^2.6.10",
     "vue-clickaway": "^2.1.0",
     "vue-date-pick": "^1.2.1",
-    "vue-good-table": "^2.18.1",
+    "vue-good-table": "^2.19.0",
     "vue-notifyjs": "^0.3.0",
     "vue-router": "^3.0.1",
-    "vuelidate": "^0.7.4"
+    "vuelidate": "^0.7.4",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

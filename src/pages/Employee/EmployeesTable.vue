@@ -127,30 +127,17 @@ export default {
       this.loadItems();
     },
 
-    loadItems() {
-      this.getFromServer(this.serverParams)
-      .then(response =>{
-        console.log("response",response);
-        this.setTableData(response.data);
-      })
-      .catch(err => {
-        console.log("Error",  err);
+    async loadItems() {
+      try {
+        await this.$store.dispatch('getListOfEmployees',this.serverParams);  
+        const tableData = this.$store.getters.getTableData;
+        console.log("tableData:", tableData);
+        this.setTableData(tableData);
+      } catch (error) {
+        console.log("Error",  error);
         this.notifyVue('top', 'center');
-      });
+      }
     },
-
-    getFromServer(serverParams) {
-      console.log("getFromServer", serverParams);
-      const url = "http://localhost:8090/api/employees/search/globalSearch";
-      const params = {
-        q: serverParams.q,
-        size: serverParams.perPage,
-        page: serverParams.page - 1,
-        sort: `${serverParams.sort[0].field},${serverParams.sort[0].type}`,
-      };
-      return axios.get(url,{ params });        
-    },
-
     setTableData(data){
       this.totalRecords = data.page.totalElements;
       this.rows = data._embedded.employees;

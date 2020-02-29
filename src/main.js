@@ -16,13 +16,13 @@
 import Vue from "vue";
 import App from "./App";
 import router from "./router/index";
+import store from './store/store';
 import axios from 'axios'
 
 import PaperDashboard from "./plugins/paperDashboard";
 import Vuelidate from 'vuelidate';
 
 Vue.use(Vuelidate);
-
 Vue.use(PaperDashboard);
 
 import "vue-notifyjs/themes/default.css";
@@ -30,5 +30,6 @@ import "vue-notifyjs/themes/default.css";
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");
